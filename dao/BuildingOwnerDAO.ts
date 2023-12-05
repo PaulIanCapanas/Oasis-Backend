@@ -1,4 +1,4 @@
-import db from '../../Database/db';
+import db from '../../Oasis-Database/db';
 
 class BuildingOwnerDAO {
 

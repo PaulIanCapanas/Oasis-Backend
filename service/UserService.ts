@@ -1,5 +1,4 @@
   //note: error handling should be in here.
-
   import UserDAO from '../dao/UserDAO';
 
   interface IPersonData {

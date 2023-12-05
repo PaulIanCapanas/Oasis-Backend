@@ -17,9 +17,8 @@ class UserController {
   }
 
   async loginUser(req: express.Request, res: express.Response) {
-    const { email, password } = req.body;
-
     try {
+      const { email, password } = req.body;
       const result = await UserService.getUserByEmail(email);
 
       if (!result) {
