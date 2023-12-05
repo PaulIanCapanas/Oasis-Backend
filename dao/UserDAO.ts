@@ -26,7 +26,7 @@ class UserDAO {
     const user = await db('User').where({id}).first();
     return user;
   }
-
+//change as needed
   async updateUser(
     id: number,
     first_name: string,
@@ -46,7 +46,6 @@ class UserDAO {
       age: age,
       user_type: user_type,
     }).returning('*')
-
     return updatedUser;
   }
 

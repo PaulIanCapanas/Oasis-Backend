@@ -1,3 +1,5 @@
+//note: data validation should be here.
+
 import express from 'express';
 import UserService from '../service/UserService';
 
@@ -9,7 +11,7 @@ class UserController {
       res.status(201).json({id})
     } catch(err) {
       console.log(err)
-      res.status(500).json({"somethin went wrong": err})
+      res.status(500).json({"user controller error": err})
     }
   }
 
@@ -19,7 +21,7 @@ class UserController {
       res.status(200).json(user);
     } catch(err) {
       console.log(err)
-      res.status(500).json({"somethin went wrong": err})
+      res.status(500).json({"user controller error": err})
     }
   }
 
@@ -29,7 +31,7 @@ class UserController {
       res.status(200).json(user);
     } catch(err) {
       console.log(err)
-      res.status(500).json({"somethin went wrong": err})
+      res.status(500).json({"user controller error": err})
     }
   }
 
@@ -39,12 +41,9 @@ class UserController {
       res.status(200).json(user);
     } catch(err) {
       console.log(err)
-      res.status(500).json({"somethin went wrong": err})
+      res.status(500).json({"user controller error": err})
     }
   }
 }
 
 export default new UserController();
-
-//note: error handling should be in service layer.
-//note: data validation should be here.
