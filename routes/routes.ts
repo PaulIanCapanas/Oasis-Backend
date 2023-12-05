@@ -5,4 +5,4 @@ import { buildingOwnerRouter } from './building owner/building_owners';
 export const router = express.Router();
 
 router.use('/user', userRouter);
-router.use('building-owner', buildingOwnerRouter)
+router.use('/building-owner', buildingOwnerRouter)
