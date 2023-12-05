@@ -1,4 +1,4 @@
-import db from '../../Database/db';
+import db from '../../Oasis-Database/db';
 
 class UserDAO {
   async createUser(
@@ -52,6 +52,16 @@ class UserDAO {
   async deleteUser(id: number) {
     const [deletedUser] = await db('User').where({id}).del().returning('*');
     return deletedUser;
+  }
+
+  async getUserByEmail(email: string) {
+    try {
+      const result = await db('User').where({ email }).first();
+      return result;
+    } catch (error) {
+      console.error('Error fetching user by email:', error);
+      throw error;
+    }
   }
 }
 

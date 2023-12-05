@@ -2,6 +2,7 @@
 
 import express from 'express';
 import UserService from '../service/UserService';
+import bcrypt from 'bcrypt'
 
 class UserController {
   async createUser(req: express.Request, res: express.Response) {
@@ -12,6 +13,31 @@ class UserController {
     } catch(err) {
       console.log(err)
       res.status(500).json({"user controller error": err})
+    }
+  }
+
+  async loginUser(req: express.Request, res: express.Response) {
+    const { email, password } = req.body;
+
+    try {
+      const result = await UserService.getUserByEmail(email);
+
+      if (!result) {
+        return res.status(401).json({ message: 'Email does not exist' });
+      }
+
+      const user = result;
+
+      const passwordMatch = await bcrypt.compare(password, user.password);
+
+      if (!passwordMatch) {
+        return res.status(401).json({ message: 'Invalid password' });
+      }
+
+      return res.json({ message: 'Login success!', user: { id: user.id, email: user.email } });
+    } catch (error) {
+      console.error('Login Error:', error);
+      res.status(500).json({ message: 'Internal server error' });
     }
   }
 
