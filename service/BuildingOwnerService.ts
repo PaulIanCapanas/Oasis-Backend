@@ -9,8 +9,8 @@ class BuildingOwnerService {
     return BuildingOwnerDAO.getBuildingOwner(id);
   }
 
-  async updateBuildingOwner(address: string) {
-    return BuildingOwnerDAO.updateBuildingOwner(address);
+  async updateBuildingOwner(id: number, address: string) {
+    return BuildingOwnerDAO.updateBuildingOwner(id, address);
   }
 
   async deleteBuildingOwner(id: number) {

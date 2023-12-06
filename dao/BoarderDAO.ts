@@ -13,8 +13,8 @@ class BoarderDAO {
     return boarder
   }
   //change as needed
-  async updateBoarder(address: string) {
-    const [updatedBoarder] = await db('Boarder').where({address}).update({
+  async updateBoarder(id: number, address: string) {
+    const [updatedBoarder] = await db('Boarder').where({id}).update({
       address
     }).returning('*');
     return updatedBoarder;

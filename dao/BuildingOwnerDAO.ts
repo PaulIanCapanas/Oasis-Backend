@@ -14,8 +14,8 @@ class BuildingOwnerDAO {
     return buildingOwner
   }
 //change as needed
-  async updateBuildingOwner(address: string) {
-    const [updatedBuildingOwner] = await db('BuildingOwner').where({address}).update({
+  async updateBuildingOwner(id: number, address: string) {
+    const [updatedBuildingOwner] = await db('BuildingOwner').where({id}).update({
       address
     }).returning('*');
     return updatedBuildingOwner;
