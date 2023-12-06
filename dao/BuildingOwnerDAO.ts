@@ -11,7 +11,7 @@ class BuildingOwnerDAO {
 
   async getBuildingOwner(id: number) {
     const buildingOwner = await db('BuildingOwner').where({id}).first();
-    return buildingOwner
+    return buildingOwner;
   }
 //change as needed
   async updateBuildingOwner(id: number, address: string) {
@@ -27,4 +27,4 @@ class BuildingOwnerDAO {
   }
 }
 
-export default new BuildingOwnerDAO()
+export default new BuildingOwnerDAO();
