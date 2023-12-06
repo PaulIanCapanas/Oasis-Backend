@@ -9,8 +9,8 @@ class BoarderService {
     return BoarderDAO.getBoarder(id);
   }
 
-  async updateBoarder(address: string) {
-    return BoarderDAO.updateBoarder(address);
+  async updateBoarder(id: number, address: string) {
+    return BoarderDAO.updateBoarder(id, address);
   }
 
   async deleteBoarder(id: number) {
