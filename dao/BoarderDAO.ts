@@ -10,20 +10,20 @@ class BoarderDAO {
 
   async getBoarder(id: number) {
     const boarder = await db('Boarder').where({id}).first();
-    return boarder
+    return boarder;
   }
   //change as needed
-  async updateBoarder(address: string) {
-    const [updatedBoarder] = await db('Boarder').where({address}).update({
+  async updateBoarder(id: number, address: string) {
+    const [updatedBoarder] = await db('Boarder').where({id}).update({
       address
     }).returning('*');
     return updatedBoarder;
   }
 
   async deleteBoarder(id: number) {
-    const [deletedBoarder] = await db('Boarder').where({id}).del().returning('*')
-    return deletedBoarder
+    const [deletedBoarder] = await db('Boarder').where({id}).del().returning('*');
+    return deletedBoarder;
   }
 }
 
-export default new BoarderDAO()
+export default new BoarderDAO();

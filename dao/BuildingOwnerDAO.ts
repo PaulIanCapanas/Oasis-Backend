@@ -1,4 +1,4 @@
-import db from '../../Database/db';
+import db from '../../Oasis-Database/db';
 
 class BuildingOwnerDAO {
 
@@ -11,11 +11,11 @@ class BuildingOwnerDAO {
 
   async getBuildingOwner(id: number) {
     const buildingOwner = await db('BuildingOwner').where({id}).first();
-    return buildingOwner
+    return buildingOwner;
   }
 //change as needed
-  async updateBuildingOwner(address: string) {
-    const [updatedBuildingOwner] = await db('BuildingOwner').where({address}).update({
+  async updateBuildingOwner(id: number, address: string) {
+    const [updatedBuildingOwner] = await db('BuildingOwner').where({id}).update({
       address
     }).returning('*');
     return updatedBuildingOwner;
@@ -27,4 +27,4 @@ class BuildingOwnerDAO {
   }
 }
 
-export default new BuildingOwnerDAO()
+export default new BuildingOwnerDAO();
