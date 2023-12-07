@@ -19,7 +19,7 @@
       return UserDAO.createUser(first_name, last_name, email, password, phone_number, age, user_type);
     }
 
-    async getUser(id: number) {
+    async getUserbyId(id: number) {
       return UserDAO.getUser(id);
     }
 
@@ -36,5 +36,7 @@
       return UserDAO.deleteUser(id);
     }
   }
-
   export default new UserService();
+
+  
+  
