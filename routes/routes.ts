@@ -7,6 +7,6 @@ import { buildingRouter } from './building/building';
 export const router = express.Router();
 
 router.use('/user', userRouter);
-router.use('/building-owner', buildingOwnerRouter)
-router.use('/boarder',boarderRouter)
-router.use('/', buildingRouter)
+router.use('/building-owner', buildingOwnerRouter);
+router.use('/boarder',boarderRouter);
+router.use('/building', buildingRouter);

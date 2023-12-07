@@ -17,7 +17,7 @@ class BuildingService {
   }
 
   async updateBuilding(buildingData: IBuildingData) {
-    const { owner_id, name, address } = buildingData
+    const { owner_id, name, address } = buildingData;
     return BuildingDAO.updateBuilding(owner_id, name, address);
   }
   async deleteBuilding(id: number) {
