@@ -3,6 +3,11 @@
 import express from 'express';
 import UserService from '../service/UserService';
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+
 
 class UserController {
   async createUser(req: express.Request, res: express.Response) {
@@ -26,12 +31,16 @@ class UserController {
       const user = result;
 
       const passwordMatch = await bcrypt.compare(password, user.password);
+      const secretKey = process.env.SECRET_KEY || 'aaronpogi'; 
 
-      if (!passwordMatch) {
-        return res.status(401).json({ message: 'Invalid password' });
+      if (passwordMatch) {
+        const token = jwt.sign({ _id: user.id.toString(), email: user }, secretKey, {
+          expiresIn: '1 days',
+        });
+        return res.json({ message: 'Login success!', user: { id: user.id, email: user.email }, token: token });
+      } else{
+        throw new Error('Password is not correct');
       }
-
-      return res.json({ message: 'Login success!', user: { id: user.id, email: user.email } });
     } catch (error) {
       console.error('Login Error:', error);
       res.status(500).json({ message: 'Internal server error' });
@@ -40,7 +49,7 @@ class UserController {
 
   async getUser(req: express.Request, res: express.Response) {
     try {
-      const user = await UserService.getUser(req.body.id);
+      const user = await UserService.getUserbyId(req.body.id);
       res.status(200).json(user);
     } catch(err) {
       res.status(500).json({"user controller error": err});
