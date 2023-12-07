@@ -1,6 +1,9 @@
   //note: error handling should be in here.
 
-  import UserDAO from '../dao/UserDAO';
+  import UserController from '../controller/UserController';
+import UserDAO from '../dao/UserDAO';
+import express from 'express';
+
 
   interface IPersonData {
     id: number,
@@ -35,6 +38,18 @@
     async deleteUser(id: number) {
       return UserDAO.deleteUser(id);
     }
+
+    async logInUser(req: express.Request, res: express.Response){
+      const { email, password } = req.body;
+      try{
+        const foundUser = await UserController.loginUser(req, res);
+        res.status(200).send(foundUser);
+      } catch(error){
+        console.error('Login Error:', error);
+        res.status(500).json({ message: 'Internal server error' });
+      }
+    }
+
   }
   export default new UserService();
 

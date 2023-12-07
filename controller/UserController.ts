@@ -37,11 +37,13 @@ class UserController {
       const secretKey = process.env.SECRET_KEY || 'aaronpogi'; 
 
       if (passwordMatch) {
-        const token = jwt.sign({ _id: UserService.getUserbyId?.toString(), email: UserService.getUserByEmail }, secretKey, {
+        const token = jwt.sign({ _id: user.id.toString(), email: user }, secretKey, {
           expiresIn: '1 days',
         });
+        return res.json({ message: 'Login success!', user: { id: user.id, email: user.email }, token: token });
+      } else{
+        throw new Error('Password is not correct');
       }
-      return res.json({ message: 'Login success!', user: { id: user.id, email: user.email } });
     } catch (error) {
       console.error('Login Error:', error);
       res.status(500).json({ message: 'Internal server error' });
