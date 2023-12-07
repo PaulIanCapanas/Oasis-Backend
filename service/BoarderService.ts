@@ -20,8 +20,8 @@ class BoarderService {
   }
 
   async deleteBoarder(id: number) {
-    return BoarderDAO.deleteBoarder(id)
+    return BoarderDAO.deleteBoarder(id);
   }
 }
 
-export default new BoarderService()
+export default new BoarderService();

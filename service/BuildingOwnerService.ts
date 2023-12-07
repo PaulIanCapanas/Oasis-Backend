@@ -20,8 +20,8 @@ class BuildingOwnerService {
   }
 
   async deleteBuildingOwner(id: number) {
-    return BuildingOwnerDAO.deleteBuildingOwner(id)
+    return BuildingOwnerDAO.deleteBuildingOwner(id);
   }
 }
 
-export default new BuildingOwnerService()
+export default new BuildingOwnerService();
