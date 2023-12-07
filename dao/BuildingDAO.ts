@@ -25,8 +25,8 @@ class BuildingDAO {
 
   async deleteBuilding(id: number) {
     const [deleteBuilding] = await db('Building').where({id}).del().returning('*');
-    return deleteBuilding
+    return deleteBuilding;
   }
 }
 
-export default new BuildingDAO()
+export default new BuildingDAO();
