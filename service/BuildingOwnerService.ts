@@ -1,5 +1,10 @@
 import BuildingOwnerDAO from "../dao/BuildingOwnerDAO";
 
+interface IBuildingOwnerData {
+  id: number,
+  address: string
+}
+
 class BuildingOwnerService {
   async createBuildingOwner(address: string) {
     return BuildingOwnerDAO.createBuildingOwnerDAO(address);
@@ -9,7 +14,8 @@ class BuildingOwnerService {
     return BuildingOwnerDAO.getBuildingOwner(id);
   }
 
-  async updateBuildingOwner(id: number, address: string) {
+  async updateBuildingOwner(buildingOwnerData: IBuildingOwnerData) {
+    const { id, address } = buildingOwnerData;
     return BuildingOwnerDAO.updateBuildingOwner(id, address);
   }
 
