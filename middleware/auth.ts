@@ -1,25 +1,23 @@
 import jwt, { Secret, JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 
-export const SECRET_KEY: Secret = 'aaronpogi';
-
-export interface auth extends Request {
- token: string | JwtPayload;
+export interface AuthRequest extends Request {
+  token: string | JwtPayload;
 }
 
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
- try {
-   const token = req.header('Authorization')?.replace('Bearer ', '');
+  try {
+    const token = req.header('Authorization')?.replace('Bearer ', '') ?? '';
 
-   if (!token) {
-     throw new Error();
-   }
+    if (!token) {
+      throw new Error('Token not provided');
+    }
 
-   const decoded = jwt.verify(token, SECRET_KEY);
-   (req as auth).token = decoded;
+    const decoded = jwt.verify(token, process.env.SECRET_KEY as Secret);
+    (req as AuthRequest).token = decoded;
 
-   next();
- } catch (err) {
-   res.status(401).send('Please authenticate');
- }
+    next();
+  } catch (err) {
+    res.status(401).send('Please authenticate');
+  }
 };
