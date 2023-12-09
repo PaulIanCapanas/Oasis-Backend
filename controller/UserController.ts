@@ -12,15 +12,24 @@ dotenv.config();
 class UserController {
   async createUser(req: express.Request, res: express.Response) {
     const user = req.body;
-    const{ email } = user;
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-_+=]).{8,}$/;
+
+    const{ email, password } = user;
     try {
       const userByEmail = await UserService.getAllUserByEmail(email);
-      if(userByEmail.length > 0){
-        return res.status(401).json("User Already Exist")
-      } else{
-        const createdUser = await UserService.createUser(req.body)
-        res.status(201).json({createdUser})
+
+      if (userByEmail.length > 0) {
+        return res.status(401).json("User Already Exists");
       }
+
+      if (!passwordPattern.test(password)) {
+        return res.status(401).json({
+          error: 'Invalid password format',
+          message: 'Please include at least one uppercase letter, special character, and ensure the password is at least 8 characters long.',
+        });
+      }
+      const createdUser = await UserService.createUser(req.body);
+      res.status(201).json({ createdUser });
     } catch(err) {
       res.status(500).json({"user controller error": err});
     }
