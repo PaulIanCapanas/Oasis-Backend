@@ -1,6 +1,7 @@
   //note: error handling should be in here.
 
-  import UserController from '../controller/UserController';
+  import { Pool } from 'pg';
+import UserController from '../controller/UserController';
 import UserDAO from '../dao/UserDAO';
 import express from 'express';
 
@@ -24,6 +25,10 @@ import express from 'express';
 
     async getUserbyId(id: number) {
       return UserDAO.getUser(id);
+    }
+
+    async getAllUserByEmail(email: string){
+      return UserDAO.getAllUserByEmail(email);
     }
 
     async getUserByEmail(email: string) {

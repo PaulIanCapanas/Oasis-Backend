@@ -63,6 +63,16 @@ class UserDAO {
       throw error;
     }
   }
+
+  async getAllUserByEmail(email: string) {
+    try {
+      const result = await db('User').where({ email });
+      return result;
+    } catch (error) {
+      console.error('Error fetching user by email:', error);
+      throw error;
+    }
+  }
 }
 
 export default new UserDAO();

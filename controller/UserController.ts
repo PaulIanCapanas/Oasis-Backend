@@ -11,10 +11,16 @@ dotenv.config();
 
 class UserController {
   async createUser(req: express.Request, res: express.Response) {
+    const user = req.body;
+    const{ email } = user;
     try {
-      const id = await UserService.createUser(req.body);
-      console.log(id)
-      res.status(201).json({id})
+      const userByEmail = await UserService.getAllUserByEmail(email);
+      if(userByEmail.length > 0){
+        return res.status(401).json("User Already Exist")
+      } else{
+        const createdUser = await UserService.createUser(req.body)
+        res.status(201).json({createdUser})
+      }
     } catch(err) {
       console.log(err)
       res.status(500).json({"user controller error": err})
@@ -37,7 +43,7 @@ class UserController {
       const secretKey = process.env.SECRET_KEY || 'aaronpogi'; 
 
       if (passwordMatch) {
-        const token = jwt.sign({ _id: user.id.toString(), email: user }, secretKey, {
+        const token = jwt.sign({ _id: user.id.toString(), email: user.email }, secretKey, {
           expiresIn: '1 days',
         });
         return res.json({ message: 'Login success!', user: { id: user.id, email: user.email }, token: token });
