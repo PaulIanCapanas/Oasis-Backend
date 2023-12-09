@@ -18,7 +18,7 @@ class UserDAO {
       phone_number: phone_number,
       age: age,
       user_type: user_type,
-    }).returning('id')
+    }).returning('id');
     return id;
   }
 
@@ -45,7 +45,7 @@ class UserDAO {
       phone_number: phone_number,
       age: age,
       user_type: user_type,
-    }).returning('*')
+    }).returning('*');
     return updatedUser;
   }
 

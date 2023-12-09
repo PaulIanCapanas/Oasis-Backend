@@ -1,6 +1,5 @@
   //note: error handling should be in here.
 
-  import { Pool } from 'pg';
 import UserController from '../controller/UserController';
 import UserDAO from '../dao/UserDAO';
 import express from 'express';
@@ -8,19 +7,23 @@ import express from 'express';
 
   interface IPersonData {
     id: number,
-    first_name: string;
-    last_name: string;
-    email: string;
-    password: string;
-    phone_number: string;
-    age: number;
-    user_type: string;
+    first_name: string,
+    last_name: string,
+    email: string,
+    password: string,
+    phone_number: string,
+    age: number,
+    user_type: string
   }
 
   class UserService {
     async createUser(personData: IPersonData) {
-      const { first_name, last_name, email, password, phone_number, age, user_type } = personData;
-      return UserDAO.createUser(first_name, last_name, email, password, phone_number, age, user_type);
+      const { 
+        first_name, last_name, email, password, phone_number, age, user_type 
+      } = personData;
+      return UserDAO.createUser(
+        first_name, last_name, email, password, phone_number, age, user_type
+        );
     }
 
     async getUserbyId(id: number) {
@@ -36,8 +39,12 @@ import express from 'express';
     }
     
     async updateUser(personData: IPersonData) {
-      const { id, first_name, last_name, email, password, phone_number, age, user_type } = personData;
-      return UserDAO.updateUser(id, first_name, last_name, email, password, phone_number, age, user_type);
+      const { 
+        id, first_name, last_name, email, password, phone_number, age, user_type
+      } = personData;
+      return UserDAO.updateUser(
+        id, first_name, last_name, email, password, phone_number, age, user_type
+      );
     }
 
     async deleteUser(id: number) {
