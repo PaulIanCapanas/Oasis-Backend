@@ -3,8 +3,9 @@
 import express from 'express';
 import UserService from '../service/UserService';
 import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken';
+import jwt, { Secret } from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
+import { IPersonData } from '../service/UserService'
 
 dotenv.config();
 
@@ -12,10 +13,28 @@ dotenv.config();
 class UserController {
   async createUser(req: express.Request, res: express.Response) {
     try {
-      const id = await UserService.createUser(req.body);
-      res.status(201).json({id});
-    } catch(err) {
-      res.status(500).json({"user controller error": err});
+      const { first_name, last_name, email, password, phone_number, age, user_type } = req.body;
+  
+      const saltRounds = 10;
+      const salt = await bcrypt.genSalt(saltRounds);
+      const hashedPassword = await bcrypt.hash(password, salt);
+  
+      const userData: IPersonData = {
+        first_name,
+        last_name,
+        email,
+        password: hashedPassword,
+        phone_number,
+        age,
+        user_type,
+      };
+  
+      const createdUserId = await UserService.createUser(userData);
+  
+      res.status(201).json({ id: createdUserId });
+    } catch (err) {
+      console.error('Create User Error:', err);
+      res.status(500).json({ message: 'Internal Server Error' });
     }
   }
 
@@ -31,7 +50,7 @@ class UserController {
       const user = result;
 
       const passwordMatch = await bcrypt.compare(password, user.password);
-      const secretKey = process.env.SECRET_KEY || 'aaronpogi'; 
+      const secretKey = process.env.SECRET_KEY as Secret; 
 
       if (passwordMatch) {
         const token = jwt.sign({ _id: user.id.toString(), email: user }, secretKey, {

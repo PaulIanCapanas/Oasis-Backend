@@ -3,10 +3,7 @@
 import UserController from '../controller/UserController';
 import UserDAO from '../dao/UserDAO';
 import express from 'express';
-
-
-  interface IPersonData {
-    id: number,
+  export interface IPersonData {
     first_name: string,
     last_name: string,
     email: string,
@@ -17,10 +14,10 @@ import express from 'express';
   }
 
   class UserService {
-    async createUser(personData: IPersonData) {
+    async createUser(IPersonData: IPersonData): Promise<number> {
       const { 
         first_name, last_name, email, password, phone_number, age, user_type 
-      } = personData;
+      } = IPersonData;
       return UserDAO.createUser(
         first_name, last_name, email, password, phone_number, age, user_type
         );
