@@ -5,7 +5,16 @@ import UserService from '../service/UserService';
 import bcrypt from 'bcrypt'
 import jwt, { Secret } from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
-import { IPersonData } from '../service/UserService'
+
+interface IPersonDataEncrypted {
+  first_name: string,
+  last_name: string,
+  email: string,
+  password: string,
+  phone_number: string,
+  age: number,
+  user_type: string
+}
 
 dotenv.config();
 
@@ -19,7 +28,7 @@ class UserController {
       const salt = await bcrypt.genSalt(saltRounds);
       const hashedPassword = await bcrypt.hash(password, salt);
   
-      const userData: IPersonData = {
+      const userData: IPersonDataEncrypted = {
         first_name,
         last_name,
         email,
