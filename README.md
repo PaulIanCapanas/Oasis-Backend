@@ -33,3 +33,6 @@ The server will start running at http://localhost:3000.
 Built With
 * Express - The web framework used
 * PostgreSQL - The database used
+
+Collaborators:
+-Arshie13
