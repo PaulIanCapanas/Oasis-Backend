@@ -8,7 +8,7 @@ class RoomController{
             const id = await RoomService.createRoom(req.body)
             res.status(201).json({id});
         } catch (err) {
-            res.status(500).json({"room controller error": err})
+            res.status(500).json({"Room Controller error": err})
         }
     }
 
@@ -17,7 +17,7 @@ class RoomController{
            const room = await RoomService.getRoom(req.body)
            res.status(200).json({room});
         } catch (err) {
-          res.status(500).json({"room controller error": err})
+          res.status(500).json({"Room Controller error": err})
         }
     }
 
@@ -26,7 +26,7 @@ class RoomController{
             const room = await RoomService.updateRoom(req.body)
             res.status(200).json({room});
         } catch (err) {
-          res.status(500).json({"room controller error": err})
+          res.status(500).json({"Room Controller error": err})
         }
     }
 
@@ -35,7 +35,7 @@ class RoomController{
             const room = await RoomService.updateRoom(req.body)
             res.status(200).json({room});
         } catch (err) {
-          res.status(500).json({"room controller error": err})
+          res.status(500).json({"Room Controller error": err})
         }
     }
     
