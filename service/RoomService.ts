@@ -6,7 +6,7 @@ interface IRoomData{
     reservation_id: number,
     room_description: string,
     type: string,
-    status: string,
+    status: string
 }
 
 class RoomService {

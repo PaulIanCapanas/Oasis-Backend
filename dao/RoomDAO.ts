@@ -30,7 +30,7 @@ class RoomDAO{
         reservation_id: number,
         room_description: string,
         type: string,
-        status: string,
+        status: string
     ) {
         const [updatedRoom] = await db('Room').where({id}).update({
             id, 
