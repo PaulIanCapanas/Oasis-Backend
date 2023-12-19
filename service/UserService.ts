@@ -43,14 +43,22 @@ class UserService {
     return UserDAO.getUserByEmail(email);
   }
 
-  async updateUser(personData: IPersonData) {
-    const {
-      id, first_name, last_name, email, password, phone_number, age, user_type
-    } = personData;
-    return UserDAO.updateUser(
-      id, first_name, last_name, email, password, phone_number, age, user_type
-    );
-  }
+    async getAllUserByEmail(email: string){
+      return UserDAO.getAllUserByEmail(email);
+    }
+
+    async getUserByEmail(email: string) {
+      return UserDAO.getUserByEmail(email);
+    }
+    
+    async updateUser(personData: IPersonData) {
+      const { 
+        id, first_name, last_name, email, password, phone_number, age, user_type
+      } = personData;
+      return UserDAO.updateUser(
+        id, first_name, last_name, email, password, phone_number, age, user_type
+      );
+    }
 
   async deleteUser(id: number) {
     return UserDAO.deleteUser(id);

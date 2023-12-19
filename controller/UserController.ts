@@ -21,31 +21,39 @@ dotenv.config();
 
 class UserController {
   async createUser(req: express.Request, res: express.Response) {
+    const user = req.body;
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-_+=]).{8,}$/;
+
+    const{ email, password } = user;
     try {
-      const { first_name, last_name, email, password, phone_number, age, user_type } = req.body;
-  
-      const saltRounds = 10;
-      const salt = await bcrypt.genSalt(saltRounds);
-      const hashedPassword = await bcrypt.hash(password, salt);
-  
-      const userData: IPersonDataEncrypted = {
-        first_name,
-        last_name,
-        email,
+
+      const userByEmail = await UserService.getAllUserByEmail(email);
+
+      if (userByEmail.length > 0) {
+        return res.status(401).json("User Already Exists");
+      }
+
+      if (!passwordPattern.test(password)) {
+        return res.status(401).json({
+          error: 'Invalid password format',
+          message: 'Please include at least one uppercase letter, special character, and ensure the password is at least 8 characters long.',
+        });
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const userWithHashedPassword = {
+        ...user,
         password: hashedPassword,
-        phone_number,
-        age,
-        user_type,
       };
-  
-      const createdUserId = await UserService.createUser(userData);
-  
-      res.status(201).json({ id: createdUserId });
-    } catch (err) {
-      console.error('Create User Error:', err);
-      res.status(500).json({ message: 'Internal Server Error' });
+    const createdUser = await UserService.createUser(userWithHashedPassword);
+    res.status(201).json({ createdUser });
+    } catch(err) {
+      res.status(500).json({"user controller error": err});
+
     }
   }
+
 
   async loginUser(req: express.Request, res: express.Response) {
     try {
@@ -56,19 +64,27 @@ class UserController {
         return res.status(401).json({ message: 'Email does not exist' });
       }
 
-      const user = result;
+      const user = result
+      console.log(user.password)
 
       const passwordMatch = await bcrypt.compare(password, user.password);
-      const secretKey = process.env.SECRET_KEY as Secret; 
+      const secretKey = process.env.SECRET_KEY || 'aaronpogi';
+     
 
-      if (passwordMatch) {
-        const token = jwt.sign({ _id: user.id.toString(), email: user }, secretKey, {
-          expiresIn: '1 days',
+      if(passwordMatch){
+        console.log("nopass")
+        const token = jwt.sign({_id: user.id, email: user.email}, secretKey, {
+          expiresIn:"24h"
+        }); 
+        return res.json({
+          message: "LogIn Successful",
+          success: true,
+          token: token,
         });
-        return res.json({ message: 'Login success!', user: { id: user.id, email: user.email }, token: token });
-      } else{
-        throw new Error('Password is not correct');
       }
+        else{
+          throw new Error('Wrong password')
+        }
     } catch (error) {
       console.error('Login Error:', error);
       res.status(500).json({ message: 'Internal server error' });
@@ -104,3 +120,4 @@ class UserController {
 }
 
 export default new UserController();
+

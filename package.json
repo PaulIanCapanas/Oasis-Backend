@@ -3,20 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "npx husky install"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npx lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{js, ts, json}": [
-      "prettier --write",
-      "git add"
-    ]
+
+    "dev": "npx ts-node index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+
   },
   "keywords": [],
   "author": "",
