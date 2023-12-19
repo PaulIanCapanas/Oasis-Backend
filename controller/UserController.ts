@@ -28,12 +28,20 @@ class UserController {
           message: 'Please include at least one uppercase letter, special character, and ensure the password is at least 8 characters long.',
         });
       }
-      const createdUser = await UserService.createUser(req.body);
-      res.status(201).json({ createdUser });
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const userWithHashedPassword = {
+        ...user,
+        password: hashedPassword,
+      };
+    const createdUser = await UserService.createUser(userWithHashedPassword);
+    res.status(201).json({ createdUser });
     } catch(err) {
       res.status(500).json({"user controller error": err});
     }
   }
+
 
   async loginUser(req: express.Request, res: express.Response) {
     try {
@@ -44,19 +52,26 @@ class UserController {
         return res.status(401).json({ message: 'Email does not exist' });
       }
 
-      const user = result;
+      const user = result
+      console.log(user.password)
 
       const passwordMatch = await bcrypt.compare(password, user.password);
-      const secretKey = process.env.SECRET_KEY || 'aaronpogi'; 
+      const secretKey = process.env.SECRET_KEY || 'aaronpogi';
 
-      if (passwordMatch) {
-        const token = jwt.sign({ _id: user.id.toString(), email: user.email }, secretKey, {
-          expiresIn: '1 days',
+      if(passwordMatch){
+        console.log("nopass")
+        const token = jwt.sign({_id: user.id, email: user.email}, secretKey, {
+          expiresIn:"24h"
+        }); 
+        return res.json({
+          message: "LogIn Successful",
+          success: true,
+          token: token,
         });
-        return res.json({ message: 'Login success!', user: { id: user.id, email: user.email }, token: token });
-      } else{
-        throw new Error('Password is not correct');
       }
+        else{
+          throw new Error('Wrong password')
+        }
     } catch (error) {
       console.error('Login Error:', error);
       res.status(500).json({ message: 'Internal server error' });
@@ -92,3 +107,4 @@ class UserController {
 }
 
 export default new UserController();
+

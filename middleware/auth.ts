@@ -1,25 +1,29 @@
-import jwt, { Secret, JwtPayload } from 'jsonwebtoken';
-import { Request, Response, NextFunction } from 'express';
+import express from 'express';
+import jwt from 'jsonwebtoken';
 
-export const SECRET_KEY: Secret = 'aaronpogi';
-
-export interface auth extends Request {
- token: string | JwtPayload;
+// Define an interface for the extended Request type
+interface AuthenticatedRequest extends express.Request {
+  user?: any; // Replace 'any' with the actual type of your user object
 }
 
-export const auth = async (req: Request, res: Response, next: NextFunction) => {
- try {
-   const token = req.header('Authorization')?.replace('Bearer ', '');
+export const auth = (req: AuthenticatedRequest, res: express.Response, next: express.NextFunction) => {
+  const tokenHeader = req.header('Authorization');
 
-   if (!token) {
-     throw new Error();
-   }
+  if (!tokenHeader) {
+    return res.status(401).json({ message: 'Unauthorized - No token provided' });
+  }
 
-   const decoded = jwt.verify(token, SECRET_KEY);
-   (req as auth).token = decoded;
+  // Remove "Bearer " prefix
+  const token = tokenHeader.replace('Bearer ', '');
 
-   next();
- } catch (err) {
-   res.status(401).send('Please authenticate');
- }
+  try {
+    const secretKey = process.env.SECRET_KEY || 'aaronpogi';
+    const decoded = jwt.verify(token, secretKey);
+
+    // Attach the decoded user information to the request object
+    req.user = decoded;
+    next();
+  } catch (error) {
+    res.status(401).json({ message: 'Unauthorized - Invalid token' });
+  }
 };
