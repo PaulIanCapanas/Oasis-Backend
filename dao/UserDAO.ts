@@ -9,7 +9,7 @@ class UserDAO {
     phone_number: string,
     age: number,
     user_type: string
-    ) {
+  ) {
     const [id] = await db('User').insert({
       first_name,
       last_name,
@@ -21,7 +21,6 @@ class UserDAO {
     }).returning('id');
     return id;
   }
-
   async getUser(id: number) {
     const user = await db('User').where({id}).first();
     return user;

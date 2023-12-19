@@ -3,8 +3,18 @@
 import express from 'express';
 import UserService from '../service/UserService';
 import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken';
+import jwt, { Secret } from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
+
+interface IPersonDataEncrypted {
+  first_name: string,
+  last_name: string,
+  email: string,
+  password: string,
+  phone_number: string,
+  age: number,
+  user_type: string
+}
 
 dotenv.config();
 
@@ -16,6 +26,7 @@ class UserController {
 
     const{ email, password } = user;
     try {
+
       const userByEmail = await UserService.getAllUserByEmail(email);
 
       if (userByEmail.length > 0) {
@@ -39,6 +50,7 @@ class UserController {
     res.status(201).json({ createdUser });
     } catch(err) {
       res.status(500).json({"user controller error": err});
+
     }
   }
 
@@ -57,6 +69,7 @@ class UserController {
 
       const passwordMatch = await bcrypt.compare(password, user.password);
       const secretKey = process.env.SECRET_KEY || 'aaronpogi';
+     
 
       if(passwordMatch){
         console.log("nopass")
