@@ -1,15 +1,16 @@
-import fs from 'fs/promises';
-import path from 'path';
+import { Knex } from 'knex';
 
 class ImageDAO {
-  async saveImage(file: Express.Multer.File): Promise<string> {
-    const destination = path.join(__dirname, '../images');
-    const filePath = path.join(destination, file.filename);
+  private knex: Knex;
 
-    await fs.rename(file.path, filePath);
+  constructor(knex: Knex) {
+    this.knex = knex;
+  }
 
-    return file.filename;
+  async saveImage(filename: string): Promise<number> {
+    const [id] = await this.knex('images').insert({ filename });
+    return id as number;
   }
 }
 
-export default new ImageDAO();
+export default ImageDAO;

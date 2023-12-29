@@ -1,22 +1,19 @@
 import { Request, Response } from 'express';
 import ImageService from '../service/ImageService';
+import ImageDAO from '../dao/ImageDAO';
+import { Knex } from 'knex';
 
 class ImageController {
-  async uploadImage(req: Request, res: Response) {
-    try {
-      if (!req.file) {
-        return res.status(400).json({ error: 'Image is not provided' });
-      }
-      const filename = await ImageService.uploadImage(req.file);
-      res.status(201).json({ filename });
-    } catch (err) {
-      if (err instanceof Error) {
-        res.status(500).json({ error: 'Image upload failed', details: err.message });
-      } else {
-        res.status(500).json({ error: 'Image upload failed', details: 'Unknown error' });
-      }
-    }
+  private imageService: ImageService;
+
+  constructor(knex: Knex) {
+    const imageDAO = new ImageDAO(knex);
+    this.imageService = new ImageService(imageDAO);
+  }
+
+  uploadImage(req: Request, res: Response): void {
+    this.imageService.uploadImage(req, res);
   }
 }
 
-export default new ImageController();
+export default ImageController;
