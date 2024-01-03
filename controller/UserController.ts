@@ -3,18 +3,9 @@
 import express from 'express';
 import UserService from '../service/UserService';
 import bcrypt from 'bcrypt'
-import jwt, { Secret } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
 
-interface IPersonDataEncrypted {
-  first_name: string,
-  last_name: string,
-  email: string,
-  password: string,
-  phone_number: string,
-  age: number,
-  user_type: string
-}
 
 dotenv.config();
 
@@ -59,6 +50,8 @@ class UserController {
     try {
       const { email, password } = req.body;
       const result = await UserService.getUserByEmail(email);
+
+      console.log(result)
 
       if (!result) {
         return res.status(401).json({ message: 'Email does not exist' });
