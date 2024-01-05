@@ -1,12 +1,8 @@
-import express from 'express';
-import Knex from 'knex';
+import express, { Request, Response } from 'express';
 import ImageController from '../../controller/ImageController';
 
-const knexConfig = require('./knexfile'); // Adjust the path accordingly
-const knex = Knex(knexConfig);
+export const imageRouter = express.Router();
 
-const app = express();
+const imageController = new ImageController();
 
-const imageController = new ImageController(knex);
-
-app.post('/upload', (req, res) => imageController.uploadImage(req, res));
+imageRouter.post('/upload-image', (req: Request, res: Response) => imageController.uploadFile(req, res));

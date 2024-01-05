@@ -1,18 +1,39 @@
 import { Request, Response } from 'express';
-import ImageService from '../service/ImageService';
-import ImageDAO from '../dao/ImageDAO';
-import { Knex } from 'knex';
+import multer from 'multer';
+import uploadService from '../service/ImageService';
+
+interface MulterRequest extends Request {
+  file?: Express.Multer.File;
+}
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+export function generateUniqueFilename(originalname: string): string {
+  const timestamp = new Date().getTime();
+  const uniqueFilename = `file_${timestamp}`;
+
+  return uniqueFilename;
+}
 
 class ImageController {
-  private imageService: ImageService;
+  async uploadFile(req: MulterRequest, res: Response): Promise<void> {
+    try {
+      if (!req.file) {
+        res.status(400).json({ error: 'No file uploaded' });
+        return;
+      }
 
-  constructor(knex: Knex) {
-    const imageDAO = new ImageDAO(knex);
-    this.imageService = new ImageService(imageDAO);
-  }
+      const { originalname, buffer } = req.file;
+      const filename = generateUniqueFilename(originalname);
 
-  uploadImage(req: Request, res: Response): void {
-    this.imageService.uploadImage(req, res);
+      const savedFile = await uploadService.uploadFile(originalname, filename, buffer);
+
+      res.json(savedFile);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
   }
 }
 

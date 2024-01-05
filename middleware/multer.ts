@@ -1,30 +1,15 @@
-import * as path from 'path';
 import multer from 'multer';
-import { Request } from 'express';
-
-type DestinationFunction = (req: Request, file: Express.Multer.File, cb: (error: Error | null, destination: string) => void) => void;
-
-const imageDirectory: string = path.join(__dirname, '../images');
+import path from 'path';
+import { generateUniqueFilename } from '../controller/ImageController';
 
 const storage = multer.diskStorage({
-    destination: ((req: Request, file: Express.Multer.File, cb: (error: Error | null, destination: string) => void) => {
-        cb(null, 'images');
-    }) as DestinationFunction,
-    filename: (req: Request, file: Express.Multer.File, cb: (error: Error | null, filename: string) => void) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-        cb(
-            null,
-            file.fieldname +
-                '-' +
-                uniqueSuffix +
-                path.extname(file.originalname)
-        );
-    },
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, '../uploaded-images'));
+  },
+  filename: function (req, file, cb) {
+    const uniqueFilename = generateUniqueFilename(file.originalname);
+    cb(null, uniqueFilename);
+  },
 });
 
-const upload = multer({ storage });
-
-export {
-    upload,
-    imageDirectory,
-};
+const upload = multer({ storage: storage });

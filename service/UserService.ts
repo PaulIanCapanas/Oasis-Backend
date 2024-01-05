@@ -28,15 +28,23 @@ interface ICreateUserData {
 class UserService {
   async createUser(userData: ICreateUserData): Promise<number> {
     const {
-      first_name, last_name, email, password, phone_number, age, user_type
+      first_name, last_name, email, password, phone_number, age
     } = userData;
     return UserDAO.createUser(
-      first_name, last_name, email, password, phone_number, age, user_type
+      first_name, last_name, email, password, phone_number, age
     );
   }
 
   async getUserbyId(id: number) {
     return UserDAO.getUser(id);
+  }
+
+  async setUserLocation(latitude: number, longitude: number) {
+    return UserDAO.setUserLocation(latitude, longitude);
+  }
+
+  getBuildingsWithinUserProximity(id: number) {
+    return UserDAO.getBuildingsWithinUserProximity(id);
   }
 
   async getAllUserByEmail(email: string) {
@@ -49,10 +57,10 @@ class UserService {
 
   async updateUser(personData: IPersonData) {
     const {
-      id, first_name, last_name, email, password, phone_number, age, user_type
+      id, first_name, last_name, email, password, phone_number, age
     } = personData;
     return UserDAO.updateUser(
-      id, first_name, last_name, email, password, phone_number, age, user_type
+      id, first_name, last_name, email, password, phone_number, age
     );
   }
 

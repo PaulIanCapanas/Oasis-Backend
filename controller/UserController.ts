@@ -9,9 +9,7 @@ import fs from 'fs/promises';
 import path from 'path';
 
 
-
 dotenv.config();
-
 
 class UserController {
   async createUser(req: express.Request, res: express.Response) {
@@ -44,11 +42,27 @@ class UserController {
     res.status(201).json({ createdUser });
     } catch(err) {
       res.status(500).json({"user controller error": err});
-
     }
   }
 
-    
+  async setUserLocation(req: express.Request, res: express.Response) {
+    try {
+      const user = await UserService.getUserbyId(req.body.id);
+      if (!user) {
+        return res.status(401).json({ message: 'User does not exist' });
+      }
+      const id = await UserService.setUserLocation(req.body.latitude, req.body.longitude);
+      res.status(201).json({id});
+    } catch (err) {
+      res.status(500).json({"user controller error": err});
+    }
+  }
+
+  async getBuildingsWithinUserProximity(req: express.Request, res: express.Response) {
+    const id = await UserService.getBuildingsWithinUserProximity(parseInt(req.params.id));
+    res.status(201).json({ id });
+  }
+
   async loginUser(req: express.Request, res: express.Response) {
     try {
       const { email, password } = req.body;
@@ -83,7 +97,7 @@ class UserController {
         }
     } catch (error) {
       console.error('Login Error:', error);
-      res.status(500).json({ message: 'Internal server error' });
+      res.status(500).json({ message: 'Wrong Password ' });
     }
   }
 
