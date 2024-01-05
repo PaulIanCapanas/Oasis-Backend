@@ -46,10 +46,6 @@ class UserService {
     async getAllUserByEmail(email: string){
       return UserDAO.getAllUserByEmail(email);
     }
-
-    async getUserByEmail(email: string) {
-      return UserDAO.getUserByEmail(email);
-    }
     
     async updateUser(personData: IPersonData) {
       const { 
