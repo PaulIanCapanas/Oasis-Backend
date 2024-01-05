@@ -3,21 +3,13 @@
 import express from 'express';
 import UserService from '../service/UserService';
 import bcrypt from 'bcrypt'
-import jwt, { Secret } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
+import fs from 'fs/promises';
+import path from 'path';
 
-interface IPersonDataEncrypted {
-  first_name: string,
-  last_name: string,
-  email: string,
-  password: string,
-  phone_number: string,
-  age: number,
-  user_type: string
-}
 
 dotenv.config();
-
 
 class UserController {
   async createUser(req: express.Request, res: express.Response) {
@@ -50,15 +42,33 @@ class UserController {
     res.status(201).json({ createdUser });
     } catch(err) {
       res.status(500).json({"user controller error": err});
-
     }
   }
 
+  async setUserLocation(req: express.Request, res: express.Response) {
+    try {
+      const user = await UserService.getUserbyId(req.body.id);
+      if (!user) {
+        return res.status(401).json({ message: 'User does not exist' });
+      }
+      const id = await UserService.setUserLocation(req.body.latitude, req.body.longitude);
+      res.status(201).json({id});
+    } catch (err) {
+      res.status(500).json({"user controller error": err});
+    }
+  }
+
+  async getBuildingsWithinUserProximity(req: express.Request, res: express.Response) {
+    const id = await UserService.getBuildingsWithinUserProximity(parseInt(req.params.id));
+    res.status(201).json({ id });
+  }
 
   async loginUser(req: express.Request, res: express.Response) {
     try {
       const { email, password } = req.body;
       const result = await UserService.getUserByEmail(email);
+
+      console.log(result)
 
       if (!result) {
         return res.status(401).json({ message: 'Email does not exist' });
@@ -87,7 +97,7 @@ class UserController {
         }
     } catch (error) {
       console.error('Login Error:', error);
-      res.status(500).json({ message: 'Internal server error' });
+      res.status(500).json({ message: 'Wrong Password ' });
     }
   }
 
@@ -115,6 +125,20 @@ class UserController {
       res.status(200).json(user);
     } catch(err) {
       res.status(500).json({"user controller error": err});
+    }
+  }
+
+  async verify(req: express.Request, res: express.Response){
+    res.json({mesage: 'Welcome to Homepage'})
+  }
+
+  async graph(req: express.Request, res: express.Response){
+    try {
+      const jsonData = await fs.readFile(path.join(__dirname, '../monthly_counts.json'), 'utf-8');
+      res.json(JSON.parse(jsonData));
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 }

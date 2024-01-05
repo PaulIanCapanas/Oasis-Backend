@@ -1,5 +1,6 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
+import cookie from 'cookie'; // Make sure to install this package
 
 // Define an interface for the extended Request type
 interface AuthenticatedRequest extends express.Request {
@@ -22,8 +23,19 @@ export const auth = (req: AuthenticatedRequest, res: express.Response, next: exp
 
     // Attach the decoded user information to the request object
     req.user = decoded;
+
+    // Set the JWT token as an HTTP-only cookie
+    res.setHeader('Set-Cookie', cookie.serialize('jwtToken', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV !== 'development', // Use HTTPS in production
+      sameSite: 'strict',
+      maxAge: 3600, // 1 hour
+      path: '/',
+    }));
+
+
     next();
   } catch (error) {
-    res.status(401).json({ message: 'Unauthorized - Invalid token' });
+    return res.status(401).json({ message: 'Unauthorized - Invalid token' });
   }
 };

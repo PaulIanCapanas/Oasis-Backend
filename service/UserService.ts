@@ -28,10 +28,10 @@ interface ICreateUserData {
 class UserService {
   async createUser(userData: ICreateUserData): Promise<number> {
     const {
-      first_name, last_name, email, password, phone_number, age, user_type
+      first_name, last_name, email, password, phone_number, age
     } = userData;
     return UserDAO.createUser(
-      first_name, last_name, email, password, phone_number, age, user_type
+      first_name, last_name, email, password, phone_number, age
     );
   }
 
@@ -39,22 +39,32 @@ class UserService {
     return UserDAO.getUser(id);
   }
 
+  async setUserLocation(latitude: number, longitude: number) {
+    return UserDAO.setUserLocation(latitude, longitude);
+  }
+
+  getBuildingsWithinUserProximity(id: number) {
+    return UserDAO.getBuildingsWithinUserProximity(id);
+  }
+
+  async getAllUserByEmail(email: string) {
+    return UserDAO.getAllUserByEmail(email);
+  }
+
   async getUserByEmail(email: string) {
     return UserDAO.getUserByEmail(email);
   }
 
-    async getAllUserByEmail(email: string){
-      return UserDAO.getAllUserByEmail(email);
-    }
-    
-    async updateUser(personData: IPersonData) {
-      const { 
-        id, first_name, last_name, email, password, phone_number, age, user_type
-      } = personData;
-      return UserDAO.updateUser(
-        id, first_name, last_name, email, password, phone_number, age, user_type
-      );
-    }
+
+  async updateUser(personData: IPersonData) {
+    const {
+      id, first_name, last_name, email, password, phone_number, age
+    } = personData;
+    return UserDAO.updateUser(
+      id, first_name, last_name, email, password, phone_number, age
+    );
+  }
+
 
   async deleteUser(id: number) {
     return UserDAO.deleteUser(id);
