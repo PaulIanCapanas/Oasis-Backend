@@ -55,6 +55,7 @@ class UserService {
     return UserDAO.getUserByEmail(email);
   }
 
+
   async updateUser(personData: IPersonData) {
     const {
       id, first_name, last_name, email, password, phone_number, age
@@ -63,6 +64,7 @@ class UserService {
       id, first_name, last_name, email, password, phone_number, age
     );
   }
+
 
   async deleteUser(id: number) {
     return UserDAO.deleteUser(id);
