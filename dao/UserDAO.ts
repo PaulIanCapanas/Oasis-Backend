@@ -15,13 +15,37 @@ class UserDAO {
       email: email,
       password: password,
       phone_number: phone_number,
-      age: age,
+      age: age
     }).returning('id');
     return id;
   }
+
+  async setUserLocation(latitude: number, longitude: number) {
+    const [id] = await db('User').insert({
+      latitude,
+      longitude
+    }).returning('id');
+    return id;
+  }
+
   async getUser(id: number) {
     const user = await db('User').where({id}).first();
     return user;
+  }
+
+  async getBuildingsWithinUserProximity(id: number) {
+    const user = await db('User').where({id}).first();
+
+    const buildingList = await db('Building')
+      .where(
+        db.raw(`
+        ST_DistanceSphere(
+        ST_MakePoint( ${user.latitude} ::double precision, ${user.longitude} ::double precision),
+        ST_MakePoint("Building".latitude, "Building".longitude)
+      ) <= 1 ::double precision * 1000
+      `)
+      );
+    return buildingList;
   }
 //change as needed
   async updateUser(
