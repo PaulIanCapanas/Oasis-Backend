@@ -45,7 +45,7 @@ class UserController {
     }
   }
 
-
+    
   async loginUser(req: express.Request, res: express.Response) {
     try {
       const { email, password } = req.body;
@@ -109,6 +109,10 @@ class UserController {
     } catch(err) {
       res.status(500).json({"user controller error": err});
     }
+  }
+
+  async verify(req: express.Request, res: express.Response){
+    res.json({mesage: 'Welcome to Homepage'})
   }
 }
 
