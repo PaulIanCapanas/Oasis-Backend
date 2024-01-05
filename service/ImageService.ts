@@ -1,37 +1,30 @@
-import { Request, Response } from 'express';
-import multer, { Multer } from 'multer';
-import ImageDAO from '../dao/ImageDAO';
+import ImageDAO from "../dao/ImageDAO";
 
-class ImageService {
-  private imageDAO: ImageDAO;
-  private multerUpload: Multer;
-
-  constructor(imageDAO: ImageDAO) {
-    this.imageDAO = imageDAO;
-    this.multerUpload = multer({ dest: 'temp/' });
-  }
-
-  uploadImage = async (req: Request, res: Response): Promise<void> => {
-    try {
-      this.multerUpload.single('image')(req, res, async (err: any) => {
-        if (err) {
-          return res.status(500).json({ error: 'Image upload failed', details: err.message });
-        }
-
-        if (!req.file) {
-          return res.status(400).json({ error: 'Image is not provided' });
-        }
-
-        const filename = req.file.filename;
-
-        const fileId = await this.imageDAO.saveImage(filename);
-        res.status(201).json({ fileId });
-      });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Image upload failed', details: 'Unknown error' });
-    }
-  };
+interface File {
+  id: number;
+  originalname: string;
+  filename: string;
+  user_id: number;
 }
 
-export default ImageService;
+class ImageService {
+  async uploadFile(originalname: string, filename: string, buffer: Buffer): Promise<File> {
+    const user_id = 1; 
+
+    const file = await ImageDAO.uploadFile(originalname, filename, user_id);
+
+    return file;
+  }
+
+  async getFileById(file_id: number): Promise<File | undefined> {
+    const file: File | undefined = await ImageDAO.getFileById(file_id);
+    return file;
+  }
+
+  async deleteFile(file_id: number): Promise<File[]> {
+    const deletedFile: File[] = await ImageDAO.deleteFile(file_id);
+    return deletedFile;
+  }
+}
+
+export default new ImageService();
