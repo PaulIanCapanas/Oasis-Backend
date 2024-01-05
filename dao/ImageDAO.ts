@@ -1,16 +1,22 @@
-import { Knex } from 'knex';
+import knex from '../../Oasis-Database/db';
 
-class ImageDAO {
-  private knex: Knex;
-
-  constructor(knex: Knex) {
-    this.knex = knex;
-  }
-
-  async saveImage(filename: string): Promise<number> {
-    const [id] = await this.knex('images').insert({ filename });
-    return id as number;
-  }
+interface FileData {
+  originalname: string;
+  filename: string;
 }
 
-export default ImageDAO;
+const insertFile = async (fileData: FileData): Promise<any> => {
+  try {
+    const [fileId] = await knex('files').insert(fileData, 'id');
+
+    const savedFile = await knex('files').where('id', fileId).first();
+
+    return savedFile;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export default {
+  insertFile,
+};
