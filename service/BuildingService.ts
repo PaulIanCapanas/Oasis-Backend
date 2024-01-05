@@ -8,13 +8,20 @@ interface IBuildingData {
 }
 
 class BuildingService {
-  async createBuilding(buildingData: IBuildingData) {
-    const { name, latitude, longitude } = buildingData
-    return BuildingDAO.createBuilding(name, latitude, longitude);
+  async createBuilding(name: string, user_id: number, latitude: number, longitude: number) {
+    try {
+      return BuildingDAO.createBuilding(name, user_id, latitude, longitude);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   async getBuilding(id: number) {
     return BuildingDAO.getBuilding(id);
+  }
+
+  async getBuildingWithinRadius(id: number) {
+    return BuildingDAO.getBuildingWithinRadius(id);
   }
 
   async updateBuilding(buildingData: IBuildingData) {

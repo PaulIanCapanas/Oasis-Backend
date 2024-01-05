@@ -4,7 +4,8 @@ import BuildingService from '../service/BuildingService';
 class BuildingController {
   async createBuilding(req: express.Request, res: express.Response) {
     try {
-      const id = await BuildingService.createBuilding(req.body);
+      const { name, user_id, longitude, latitude } = req.body;
+      const id = await BuildingService.createBuilding(name, user_id, latitude, longitude);
       res.status(201).json({id});
     } catch (err) {
       res.status(500).json({"Building service error": err});
@@ -16,6 +17,16 @@ class BuildingController {
       const id = await BuildingService.getBuilding(req.body);
       res.status(201).json({id});
     } catch (err) {
+      res.status(500).json({"Building service error": err});
+    }
+  }
+
+  async getBuildingWithinRadius(req: express.Request, res: express.Response) {
+    try {
+      const id = await BuildingService.getBuildingWithinRadius(parseInt(req.params.id));
+      res.status(201).json({id});
+    } catch (err) {
+      console.log(err)
       res.status(500).json({"Building service error": err});
     }
   }

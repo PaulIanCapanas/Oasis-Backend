@@ -3,7 +3,8 @@ import BuildingController from '../../controller/BuildingController';
 
 export const buildingRouter = express.Router();
 
-buildingRouter.get('/get-user', BuildingController.getBuilding);
-buildingRouter.post('/create-user', BuildingController.createBuilding);
-buildingRouter.put('/update-user', BuildingController.updateBuilding);
-buildingRouter.delete('/delete-user', BuildingController.deleteBuilding);
+buildingRouter.get('/get-building', BuildingController.getBuilding);
+buildingRouter.get('/get-buildings/:id', BuildingController.getBuildingWithinRadius);
+buildingRouter.post('/create-building', BuildingController.createBuilding);
+buildingRouter.put('/update-building', BuildingController.updateBuilding);
+buildingRouter.delete('/delete-building', BuildingController.deleteBuilding);

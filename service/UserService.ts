@@ -39,6 +39,14 @@ class UserService {
     return UserDAO.getUser(id);
   }
 
+  async setUserLocation(latitude: number, longitude: number) {
+    return UserDAO.setUserLocation(latitude, longitude);
+  }
+
+  getBuildingsWithinUserProximity(id: number) {
+    return UserDAO.getBuildingsWithinUserProximity(id);
+  }
+
   async getAllUserByEmail(email: string) {
     return UserDAO.getAllUserByEmail(email);
   }
