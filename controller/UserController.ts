@@ -5,6 +5,9 @@ import UserService from '../service/UserService';
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
+import fs from 'fs/promises';
+import path from 'path';
+
 
 
 dotenv.config();
@@ -113,6 +116,16 @@ class UserController {
 
   async verify(req: express.Request, res: express.Response){
     res.json({mesage: 'Welcome to Homepage'})
+  }
+
+  async graph(req: express.Request, res: express.Response){
+    try {
+      const jsonData = await fs.readFile(path.join(__dirname, '../monthly_counts.json'), 'utf-8');
+      res.json(JSON.parse(jsonData));
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
   }
 }
 
