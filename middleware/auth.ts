@@ -33,6 +33,7 @@ export const auth = (req: AuthenticatedRequest, res: express.Response, next: exp
       path: '/',
     }));
 
+
     next();
   } catch (error) {
     return res.status(401).json({ message: 'Unauthorized - Invalid token' });

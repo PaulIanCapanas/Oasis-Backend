@@ -12,4 +12,5 @@ userRouter.put('/update-user', UserController.updateUser);
 userRouter.delete('/delete-user', UserController.deleteUser);
 userRouter.post('/login', UserController.loginUser);
 userRouter.post('/register', UserController.createUser);
+userRouter.get('/data' , UserController.graph);
 
