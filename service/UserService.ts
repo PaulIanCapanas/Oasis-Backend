@@ -43,8 +43,8 @@ class UserService {
     return UserDAO.setUserLocation(latitude, longitude);
   }
 
-  getBuildingsWithinUserProximity(id: number) {
-    return UserDAO.getBuildingsWithinUserProximity(id);
+  getBuildingsWithinUserProximity(lat: number, lng: number) {
+    return UserDAO.getBuildingsWithinUserProximity(lat, lng);
   }
 
   async getAllUserByEmail(email: string) {

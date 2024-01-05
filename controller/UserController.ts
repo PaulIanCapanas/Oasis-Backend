@@ -59,7 +59,8 @@ class UserController {
   }
 
   async getBuildingsWithinUserProximity(req: express.Request, res: express.Response) {
-    const id = await UserService.getBuildingsWithinUserProximity(parseInt(req.params.id));
+    console.log(req.body)
+    const id = await UserService.getBuildingsWithinUserProximity(req.body.lat, req.body.lng);
     res.status(201).json({ id });
   }
 
