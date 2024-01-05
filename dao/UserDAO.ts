@@ -33,14 +33,14 @@ class UserDAO {
     return user;
   }
 
-  async getBuildingsWithinUserProximity(id: number) {
-    const user = await db('User').where({id}).first();
+  async getBuildingsWithinUserProximity(lat: number, lng: number) {
+    console.log(lat, lng)
 
     const buildingList = await db('Building')
       .where(
         db.raw(`
         ST_DistanceSphere(
-        ST_MakePoint( ${user.latitude} ::double precision, ${user.longitude} ::double precision),
+        ST_MakePoint( ${lat} ::double precision, ${lng} ::double precision),
         ST_MakePoint("Building".latitude, "Building".longitude)
       ) <= 1 ::double precision * 1000
       `)
