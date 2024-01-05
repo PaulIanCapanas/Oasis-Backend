@@ -4,7 +4,7 @@ class BuildingOwnerDAO {
 
   async createBuildingOwnerDAO (address: string) {
     const [id] = await db('BuildingOwner').insert({
-      address
+      address 
     }).returning('id');
     return id;
   }
