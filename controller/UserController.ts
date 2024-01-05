@@ -94,7 +94,7 @@ class UserController {
         }
     } catch (error) {
       console.error('Login Error:', error);
-      res.status(500).json({ message: 'Internal server error' });
+      res.status(500).json({ message: 'Wrong Password ' });
     }
   }
 
