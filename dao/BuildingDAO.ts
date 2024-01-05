@@ -1,10 +1,11 @@
 import db from '../../Oasis-Database/db';
 
 class BuildingDAO {
-  async createBuilding(name: string, address: string) {
+  async createBuilding(name: string, latitude: number, longitude: number) {
     const [id] = await db('Building').insert({
       name,
-      address
+      latitude,
+      longitude
     }).returning('id');
     return id;
   }
@@ -15,10 +16,11 @@ class BuildingDAO {
   }
   
   //edit what needs to change upon edit
-  async updateBuilding(id: number, name: string, address: string) {
+  async updateBuilding(id: number, name: string, latitude: number, longitude: number) {
     const [updateBuilding] = await db('Building').where({id}).update({
       name,
-      address
+      latitude,
+      longitude
     }).returning('*');
     return updateBuilding;
   }
