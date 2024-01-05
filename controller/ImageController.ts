@@ -24,10 +24,10 @@ class ImageController {
         return;
       }
 
-      const { originalname, filename, buffer } = req.file;
-      const fileData = { originalname, filename, buffer };
+      const { originalname, buffer } = req.file;
+      const filename = generateUniqueFilename(originalname);
 
-      const savedFile = await uploadService.saveFile(fileData);
+      const savedFile = await uploadService.uploadFile(originalname, filename, buffer);
 
       res.json(savedFile);
     } catch (error) {

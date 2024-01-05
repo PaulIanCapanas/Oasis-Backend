@@ -1,22 +1,39 @@
-import knex from '../../Oasis-Database/db';
+import db from '../../Oasis-Database/db';
 
-interface FileData {
+interface File {
+  id: number;
   originalname: string;
   filename: string;
+  user_id: number;
 }
 
-const insertFile = async (fileData: FileData): Promise<any> => {
-  try {
-    const [fileId] = await knex('files').insert(fileData, 'id');
+class ImageDAO {
+  async uploadFile(originalname: string, filename: string, user_id: number): Promise<File> {
+    const [file]: File[] = await db('files').insert({
+      originalname,
+      filename,
+      user_id
+    }).returning('*');
 
-    const savedFile = await knex('files').where('id', fileId).first();
-
-    return savedFile;
-  } catch (error) {
-    throw error;
+    return file;
   }
-};
 
-export default {
-  insertFile,
-};
+  async getFileById(file_id: number): Promise<File | undefined> {
+    const file: File | undefined = await db('files')
+      .where({ id: file_id })
+      .first();
+
+    return file;
+  }
+
+  async deleteFile(file_id: number): Promise<File[]> {
+    const deletedFile: File[] = await db('files')
+      .where({ id: file_id })
+      .del()
+      .returning('*');
+
+    return deletedFile;
+  }
+}
+
+export default new ImageDAO();
