@@ -8,7 +8,6 @@ class UserDAO {
     password: string,
     phone_number: string,
     age: number,
-    user_type: string
   ) {
     const [id] = await db('User').insert({
       first_name,
@@ -17,7 +16,6 @@ class UserDAO {
       password: password,
       phone_number: phone_number,
       age: age,
-      user_type: user_type,
     }).returning('id');
     return id;
   }
@@ -34,7 +32,6 @@ class UserDAO {
     password: string,
     phone_number: string,
     age: number,
-    user_type: string
     ) {
     const [updatedUser] = await db('User').where({id}).update({
       first_name,
@@ -42,8 +39,7 @@ class UserDAO {
       email: email,
       password: password,
       phone_number: phone_number,
-      age: age,
-      user_type: user_type,
+      age: age
     }).returning('*');
     return updatedUser;
   }
