@@ -8,9 +8,9 @@ interface IBuildingData {
 }
 
 class BuildingService {
-  async createBuilding(name: string, user_id: number, latitude: number, longitude: number) {
+  async createBuilding(name: string, user_id: number, latitude: number, longitude: number, description: string, address: string) {
     try {
-      return BuildingDAO.createBuilding(name, user_id, latitude, longitude);
+      return BuildingDAO.createBuilding(name, user_id, latitude, longitude, description, address);
     } catch (err) {
       console.log(err);
     }
@@ -20,8 +20,8 @@ class BuildingService {
     return BuildingDAO.getBuilding(id);
   }
 
-  async getBuildingWithinRadius(id: number) {
-    return BuildingDAO.getBuildingWithinRadius(id);
+  async getBuildingWithinRadius(lat: number, lng: number) {
+    return BuildingDAO.getBuildingWithinRadius(lat, lng);
   }
 
   async updateBuilding(buildingData: IBuildingData) {

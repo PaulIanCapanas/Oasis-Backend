@@ -1,12 +1,14 @@
 import db from '../../Oasis-Database/db';
 
 class BuildingDAO {
-  async createBuilding(name: string, user_id: number, latitude: number, longitude: number) {
+  async createBuilding(name: string, user_id: number, latitude: number, longitude: number, description: string, address: string) {
     const [id] = await db('Building').insert({
       name,
-      user_id,
+      address,
+      longitude,
       latitude,
-      longitude
+      user_id,
+      description
     }).returning('id');
     return id;
   }
@@ -16,19 +18,14 @@ class BuildingDAO {
     return building;
   }
 
-  async getBuildingWithinRadius(id: number) {
-    
-    const building = await db('Building').where({id}).first();
-
-    console.log(building)
-
+  async getBuildingWithinRadius(lat: number, lng: number) {
     const buildingList = await db('Building')
       .where(
         db.raw(`
         ST_DistanceSphere(
-        ST_MakePoint( ${building.latitude} ::double precision, ${building.longitude} ::double precision),
+        ST_MakePoint( ${lat} ::double precision, ${lng} ::double precision),
         ST_MakePoint("Building".latitude, "Building".longitude)
-      ) <= 1 ::double precision * 1000
+      ) <= 100 ::double precision * 1000
       `)
       );
     return buildingList;
