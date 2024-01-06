@@ -83,7 +83,6 @@ class UserController {
      
 
       if(passwordMatch){
-        console.log("nopass")
         const token = jwt.sign({_id: user.id, email: user.email}, secretKey, {
           expiresIn:"24h"
         }); 
@@ -91,6 +90,7 @@ class UserController {
           message: "LogIn Successful",
           success: true,
           token: token,
+          id: user.id
         });
       }
         else{
